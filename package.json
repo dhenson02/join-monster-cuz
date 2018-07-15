@@ -65,7 +65,7 @@
   },
   "homepage": "https://github.com/dhenson02/join-monster#readme",
   "peerDependencies": {
-    "graphql": "0.6 || 0.7 || 0.8 || 0.9 || 0.10 || 0.11 || 0.12"
+    "graphql": "0.6 || 0.7 || 0.8 || 0.9 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -80,7 +80,7 @@
     "eslint": "^5.0.1",
     "eslint-config-airbnb-base": "^13.0.0",
     "faker": "^4.1.0",
-    "graphql": "^0.13.0",
+    "graphql": "^0.13.2",
     "graphsiql": "0.2.0",
     "jsdoc-to-markdown": "^4.0.0",
     "kcors": "^2.2.1",
