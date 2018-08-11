@@ -8,10 +8,10 @@ BLUE='\033[104m'
 YELLOW='\033[33m'
 NC='\033[0m'
 
-ORACLE=1
+ORACLE=0
 PG=1
-MYSQL=1
-SQLITE=1
+MYSQL=0
+SQLITE=0
 
 while [[ $# -gt 0 ]]
 do

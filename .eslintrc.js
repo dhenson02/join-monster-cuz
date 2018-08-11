@@ -10,15 +10,16 @@ module.exports = {
   parser: 'babel-eslint',
   rules: {
     indent: [
-      'error',
+      'warn',
       2
     ],
     'no-extend-native': 0,
     'func-names': 0,
     'space-before-function-paren': [
-      'error',
+      'warn',
       'never'
     ],
+    'no-shadow': 0,
     'guard-for-in': 0,
     'no-restricted-syntax': 0,
     'no-param-reassign': 0,
@@ -41,19 +42,23 @@ module.exports = {
       { ignoreComments: true }
     ],
     'array-bracket-spacing': [
-      'error',
+      'warn',
       'always'
+    ],
+    'brace-style': [
+      'warn',
+      'stroustrup'
     ],
     'linebreak-style': [
       'error',
       'unix'
     ],
     quotes: [
-      'error',
+      'warn',
       'single'
     ],
     semi: [
-      'error',
+      'warn',
       'never'
     ],
     'no-console': 0,

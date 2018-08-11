@@ -13,7 +13,7 @@ const connection = process.env.NODE_ENV !== 'test' ?
         oracleUrl('test1') :
         { filename: path.join(__dirname, '../data/db/test1-data.sl3') }
 
-let client = 'sqlite3'
+let client = 'pg'
 if (dbType === 'PG') {
   client = 'pg'
 } else if (dbType === 'MYSQL') {
@@ -40,4 +40,3 @@ function oracleUrl(dbName) {
   const [ password, connectString ] = process.env.ORACLE_URL.split('@')
   return { user: dbName, password, connectString, stmtCacheSize: 0 }
 }
-

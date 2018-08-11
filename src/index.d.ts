@@ -6,8 +6,25 @@ import * as graphql from 'graphql'
 declare module 'graphql/type/definition' {
   type SqlJoin<TContext, TArgs> = (table1: string, table2: string, args: TArgs, context: TContext, sqlASTNode: any) => string
   type Where<TContext, TArgs> = (usersTable: string, args: TArgs, context: TContext, sqlASTNode: any) => string | void
-  type Order = 'ASC' | 'asc' | 'DESC' | 'desc'
-  type OrderBy = string | { [key: string]: Order }
+  type Order = (
+    'ASC' |
+    'asc' |
+    'DESC' |
+    'desc' |
+    'ASC NULLS LAST' |
+    'asc nulls last' |
+    'ASC NULLS FIRST' |
+    'asc nulls first' |
+    'DESC NULLS LAST' |
+    'desc nulls last' |
+    'DESC NULLS FIRST' |
+    'desc nulls first'
+  );
+  type OrderBy = (
+    string |
+    { [key: string]: Order } |
+    (tableName: string) => ({column: string, direction: string})
+  );
   type ThunkWithArgsCtx<T, TContext, TArgs> = ((args: TArgs, context: TContext) => T) | T;
 
   export interface GraphQLObjectTypeConfig<TSource, TContext> {

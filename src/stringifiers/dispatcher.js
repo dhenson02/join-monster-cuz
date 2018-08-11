@@ -20,9 +20,15 @@ export default async function stringifySqlAST(topNode, context, options) {
 
   // recursively figure out all the selections, joins, and where conditions that we need
   let { selections, tables, wheres, orders } = await _stringifySqlAST(
-    null, topNode, [],
-    context, [], [],
-    [], [], options.batchScope,
+    null,
+    topNode,
+    [],
+    context,
+    [],
+    [],
+    [],
+    [],
+    options.batchScope,
     dialect
   )
 
@@ -273,8 +279,14 @@ function stringifyOuterOrder(orders, q) {
   const conditions = []
   for (let condition of orders) {
     for (let column in condition.columns) {
-      const direction = condition.columns[column]
-      conditions.push(`${q(condition.table)}.${q(column)} ${direction}`)
+      const orderBy = condition.columns[column]
+      if (typeof orderBy === `function`) {
+        const { column, direction } = orderBy(condition.table)
+        conditions.push(`${column} ${direction}`)
+      }
+      else {
+        conditions.push(`${q(condition.table)}.${q(column)} ${orderBy}`)
+      }
     }
   }
   return conditions.join(', ')

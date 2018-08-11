@@ -675,9 +675,16 @@ export function handleOrderBy(orderBy, options) {
   if (typeof orderBy === 'object') {
     let directionTester = validateDirectionWithDialect(options)
     for (let column in orderBy) {
-      let direction = orderBy[column].toUpperCase().trim()
-      if (!directionTester(direction)) {
-        throw new Error(direction + ' is not a valid sorting direction')
+      let direction;
+      let sorter = orderBy[column];
+      if (typeof sorter === `function`) {
+        direction = sorter;
+      }
+      else {
+        direction = sorter.toUpperCase().trim()
+        if (!directionTester(direction)) {
+          throw new Error(direction + ' is not a valid sorting direction')
+        }
       }
       orderColumns[column] = direction
     }

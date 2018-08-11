@@ -59,7 +59,7 @@ export function cursorToObj(cursor) {
 }
 
 // wrap in a pair of single quotes for the SQL if needed
-export function maybeQuote(value, dialectName) {
+export function maybeQuote(value) {
   if (value == null) {
     return 'NULL'
   }
@@ -70,12 +70,6 @@ export function maybeQuote(value, dialectName) {
     && typeof value === 'object'
     && typeof value.toString === 'function') {
     return `X'${value.toString('hex')}'`
-  }
-  if (dialectName === 'oracle' && value.match(/\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(.\d+)?Z?/)) {
-    return value.replace(
-      /(\d{4}-\d\d-\d\d)T(\d\d:\d\d:\d\d)(.\d+)?Z?/,
-      'TIMESTAMP \'$1 $2$3 UTC\''
-    )
   }
 
   // Picked from https://github.com/brianc/node-postgres/blob/876018/lib/client.js#L235..L260
@@ -108,7 +102,7 @@ function getDialectName(options) {
   if (options.dialectModule) {
     return options.dialectModule.name
   }
-  return options.dialect || 'sqlite3'
+  return options.dialect || 'pg'
 }
 
 // returns new function that accepts string input for "direction"
@@ -234,13 +228,13 @@ export async function compileSqlAST(sqlAST, context, options) {
   }
 
   // now convert the "SQL AST" to sql
-  options.dialect = options.dialect || 'sqlite3'
+  options.dialect = options.dialect || 'pg'
   if (options.dialect === 'standard') {
     deprecate(
       'dialect "standard" is deprecated, because there is no true implementation of the SQL standard',
-      '"sqlite3" is the default'
+      '"pg" is the default'
     )
-    options.dialect = 'sqlite3'
+    options.dialect = 'pg'
   }
   const sql = await stringifySQL(sqlAST, context, options)
   if (debug.enabled) {
