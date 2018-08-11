@@ -202,7 +202,7 @@ function handleTable(sqlASTNode, queryASTNode, field, gqlType, namespace, grabMa
   sqlASTNode.as = namespace.generate('table', field.name)
 
   if (field.orderBy && !sqlASTNode.orderBy) {
-    sqlASTNode.orderBy = handleOrderBy(unthunk(field.orderBy, sqlASTNode.args || {}, context), options)
+    sqlASTNode.orderBy = handleOrderBy(unthunk(field.orderBy, sqlASTNode.args || {}, context, sqlASTNode.as), options)
   }
 
   // tables have child fields, lets push them to an array
@@ -235,7 +235,7 @@ function handleTable(sqlASTNode, queryASTNode, field, gqlType, namespace, grabMa
     }
 
     if (field.junction.orderBy) {
-      junction.orderBy = handleOrderBy(unthunk(field.junction.orderBy, sqlASTNode.args || {}, context), options)
+      junction.orderBy = handleOrderBy(unthunk(field.junction.orderBy, sqlASTNode.args || {}, context, sqlASTNode.as, sqlASTNode.junction.as), options)
     }
 
     if (field.junction.where) {
@@ -270,7 +270,7 @@ function handleTable(sqlASTNode, queryASTNode, field, gqlType, namespace, grabMa
 
   if (field.limit) {
     assert(field.orderBy, '`orderBy` is required with `limit`')
-    sqlASTNode.limit = unthunk(field.limit, sqlASTNode.args || {}, context)
+    sqlASTNode.limit = unthunk(field.limit, sqlASTNode.args || {}, context, sqlASTNode.as)
   }
 
   if (sqlASTNode.paginate) {
@@ -616,17 +616,17 @@ export function pruneDuplicateSqlDeps(sqlAST, namespace) {
 
 function getSortColumns(field, sqlASTNode, context, options) {
   if (field.sortKey) {
-    sqlASTNode.sortKey = unthunk(field.sortKey, sqlASTNode.args || {}, context)
+    sqlASTNode.sortKey = unthunk(field.sortKey, sqlASTNode.args || {}, context, sqlASTNode.as)
   }
   if (field.orderBy) {
-    sqlASTNode.orderBy = handleOrderBy(unthunk(field.orderBy, sqlASTNode.args || {}, context), options)
+    sqlASTNode.orderBy = handleOrderBy(unthunk(field.orderBy, sqlASTNode.args || {}, context, sqlASTNode.as), options)
   }
   if (field.junction) {
     if (field.junction.sortKey) {
-      sqlASTNode.junction.sortKey = unthunk(field.junction.sortKey, sqlASTNode.args || {}, context)
+      sqlASTNode.junction.sortKey = unthunk(field.junction.sortKey, sqlASTNode.args || {}, context, sqlASTNode.as, sqlASTNode.junction.as)
     }
     if (field.junction.orderBy) {
-      sqlASTNode.junction.orderBy = handleOrderBy(unthunk(field.junction.orderBy, sqlASTNode.args || {}, context), options)
+      sqlASTNode.junction.orderBy = handleOrderBy(unthunk(field.junction.orderBy, sqlASTNode.args || {}, context, sqlASTNode.as, sqlASTNode.junction.as), options)
     }
   }
   if (!sqlASTNode.sortKey && !sqlASTNode.orderBy) {
